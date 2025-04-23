@@ -4,6 +4,8 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TasksService } from './tasks.service';
+import { ObtainDataController } from './obtain-data/obtain-data.controller';
+import { ObtainDataService } from './obtain-data/obtain-data.service';
 
 @Module({
   imports: [
@@ -13,7 +15,7 @@ import { TasksService } from './tasks.service';
     }),
     ScheduleModule.forRoot(),
   ],
-  controllers: [AppController],
-  providers: [AppService, TasksService],
+  controllers: [AppController, ObtainDataController],
+  providers: [AppService, TasksService, ObtainDataService],
 })
 export class AppModule { }
