@@ -16,7 +16,7 @@ export class TasksController {
         description: 'Return all cron jobs status',
         type: [TaskStatusDto]
     })
-    getCronJobsStatus(): TaskStatusDto[] {
+    async getCronJobsStatus(): Promise<TaskStatusDto[]> {
         return this.tasksService.getCronJobsStatus();
     }
 
@@ -53,9 +53,9 @@ export class TasksController {
         type: TaskResponseDto
     })
     @ApiResponse({ status: 404, description: 'Task not found' })
-    removeCronJob(@Param('slug') slug: string): TaskResponseDto {
+    async removeCronJob(@Param('slug') slug: string): Promise<TaskResponseDto> {
         try {
-            return this.tasksService.removeCronJob(slug);
+            return await this.tasksService.removeCronJob(slug);
         } catch (error) {
             if (error instanceof HttpException) {
                 throw error;
@@ -76,9 +76,9 @@ export class TasksController {
         type: TaskResponseDto
     })
     @ApiResponse({ status: 404, description: 'Task not found' })
-    pauseCronJob(@Param('slug') slug: string): TaskResponseDto {
+    async pauseCronJob(@Param('slug') slug: string): Promise<TaskResponseDto> {
         try {
-            return this.tasksService.pauseCronJob(slug);
+            return await this.tasksService.pauseCronJob(slug);
         } catch (error) {
             if (error instanceof HttpException) {
                 throw error;
@@ -99,9 +99,9 @@ export class TasksController {
         type: TaskResponseDto
     })
     @ApiResponse({ status: 404, description: 'Task not found' })
-    resumeCronJob(@Param('slug') slug: string): TaskResponseDto {
+    async resumeCronJob(@Param('slug') slug: string): Promise<TaskResponseDto> {
         try {
-            return this.tasksService.resumeCronJob(slug);
+            return await this.tasksService.resumeCronJob(slug);
         } catch (error) {
             if (error instanceof HttpException) {
                 throw error;
