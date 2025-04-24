@@ -3,6 +3,7 @@ import { SchedulerRegistry, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ObtainDataService } from '../obtain-data/obtain-data.service';
+import { EventService } from '../obtain-data/services/event.service';
 import { CronJob } from 'cron';
 import { TaskStatusDto } from './dto/task-status.dto';
 import { TaskResponseDto } from './dto/task-response.dto';
@@ -14,6 +15,7 @@ export class TasksService implements OnModuleInit {
 
     constructor(
         private readonly obtainDataService: ObtainDataService,
+        private readonly eventService: EventService,
         private readonly schedulerRegistry: SchedulerRegistry,
         @InjectRepository(Task)
         private readonly taskRepository: Repository<Task>
@@ -179,8 +181,16 @@ export class TasksService implements OnModuleInit {
     private async processJob(slug: string) {
         try {
             this.logger.debug(`Processing job for slug: ${slug}`);
-            const data = await this.obtainDataService.getEventBySlug(slug);
-            console.log(`Data for ${slug}:`, data);
+            const eventData = await this.obtainDataService.getEventBySlug(slug);
+
+            if (!eventData) {
+                this.logger.warn(`No data found for slug: ${slug}`);
+                return;
+            }
+
+            // 保存事件和市场数据到数据库
+            await this.eventService.saveEventData(eventData);
+            this.logger.debug(`Successfully saved event data for slug: ${slug}`);
 
             // 更新最后执行时间
             const job = this.schedulerRegistry.getCronJobs().get(`polymarket-${slug}`);
@@ -195,6 +205,13 @@ export class TasksService implements OnModuleInit {
             }
         } catch (error) {
             this.logger.error(`Error processing job for ${slug}: ${error.message}`);
+            if (error instanceof HttpException) {
+                throw error;
+            }
+            throw new HttpException(
+                `Failed to process job for ${slug}: ${error.message}`,
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
     }
 } 

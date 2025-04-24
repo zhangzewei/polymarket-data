@@ -11,18 +11,18 @@ export class Task {
     @Column()
     name: string;
 
-    @Column({ default: true })
+    @Column({ name: 'is_running', default: true })
     isRunning: boolean;
 
-    @Column({ nullable: true })
+    @Column({ name: 'last_run_time', nullable: true })
     lastRunTime: Date;
 
-    @Column({ nullable: true })
+    @Column({ name: 'next_run_time', nullable: true })
     nextRunTime: Date;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date;
 } 
