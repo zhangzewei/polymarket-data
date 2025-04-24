@@ -1,7 +1,9 @@
 import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { SchedulerRegistry, CronExpression } from '@nestjs/schedule';
-import { ObtainDataService } from './obtain-data/obtain-data.service';
+import { ObtainDataService } from '../obtain-data/obtain-data.service';
 import { CronJob } from 'cron';
+import { TaskStatusDto } from './dto/task-status.dto';
+import { TaskResponseDto } from './dto/task-response.dto';
 
 @Injectable()
 export class TasksService {
@@ -14,7 +16,7 @@ export class TasksService {
     ) { }
 
     // 添加新的定时任务
-    async addCronJob(slug: string) {
+    async addCronJob(slug: string): Promise<TaskResponseDto> {
         try {
             const jobName = `polymarket-${slug}`;
 
@@ -50,7 +52,7 @@ export class TasksService {
     }
 
     // 删除定时任务
-    removeCronJob(slug: string) {
+    removeCronJob(slug: string): TaskResponseDto {
         const jobName = `polymarket-${slug}`;
         const job = this.schedulerRegistry.getCronJobs().get(jobName);
 
@@ -69,18 +71,18 @@ export class TasksService {
     }
 
     // 获取所有定时任务状态
-    getCronJobsStatus() {
+    getCronJobsStatus(): TaskStatusDto[] {
         const jobs = this.schedulerRegistry.getCronJobs();
         return Array.from(jobs.entries()).map(([name, job]) => ({
             name,
             slug: name.replace('polymarket-', ''),
             isRunning: this.jobStatus.get(name) || false,
-            nextDate: job.nextDate()
+            nextDate: job.nextDate().toString()
         }));
     }
 
     // 暂停指定定时任务
-    pauseCronJob(slug: string) {
+    pauseCronJob(slug: string): TaskResponseDto {
         const jobName = `polymarket-${slug}`;
         const job = this.schedulerRegistry.getCronJobs().get(jobName);
 
@@ -95,7 +97,7 @@ export class TasksService {
     }
 
     // 恢复指定定时任务
-    resumeCronJob(slug: string) {
+    resumeCronJob(slug: string): TaskResponseDto {
         const jobName = `polymarket-${slug}`;
         const job = this.schedulerRegistry.getCronJobs().get(jobName);
 
