@@ -6,11 +6,20 @@ import { AppService } from './app.service';
 import { ObtainDataModule } from './obtain-data/obtain-data.module';
 import { TasksModule } from './tasks/tasks.module';
 import { ConfigModule } from '@nestjs/config';
+import { GraphQLModule as NestGraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { join } from 'path';
+import { GraphQLModule } from './graphql/graphql.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+    NestGraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      sortSchema: true,
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -25,6 +34,7 @@ import { ConfigModule } from '@nestjs/config';
     ScheduleModule.forRoot(),
     ObtainDataModule,
     TasksModule,
+    GraphQLModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -4,10 +4,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ObtainDataService } from '../obtain-data/obtain-data.service';
 import { EventService } from '../obtain-data/services/event.service';
-import { CronJob } from 'cron';
 import { TaskStatusDto } from './dto/task-status.dto';
 import { TaskResponseDto } from './dto/task-response.dto';
 import { Task } from './entities/task.entity';
+import { CronJob } from 'cron';
 
 @Injectable()
 export class TasksService implements OnModuleInit {
@@ -35,7 +35,7 @@ export class TasksService implements OnModuleInit {
                     });
 
                     // 添加到调度器
-                    this.schedulerRegistry.addCronJob(task.name, job);
+                    this.schedulerRegistry.addCronJob(task.name, job as any);
 
                     // 如果任务之前是运行状态，则启动它
                     if (task.isRunning) {
@@ -74,15 +74,19 @@ export class TasksService implements OnModuleInit {
             });
 
             // 添加到调度器
-            this.schedulerRegistry.addCronJob(jobName, job);
+            this.schedulerRegistry.addCronJob(jobName, job as any);
             job.start();
+
+            // 计算下一次运行时间
+            const nextRunTime = new Date();
+            nextRunTime.setMinutes(nextRunTime.getMinutes() + 1);
 
             // 保存到数据库
             const task = this.taskRepository.create({
                 slug,
                 name: jobName,
                 isRunning: true,
-                nextRunTime: job.nextDate()
+                nextRunTime
             });
             await this.taskRepository.save(task);
 
@@ -164,12 +168,16 @@ export class TasksService implements OnModuleInit {
 
         job.start();
 
+        // 计算下一次运行时间
+        const nextRunTime = new Date();
+        nextRunTime.setMinutes(nextRunTime.getMinutes() + 1);
+
         // 更新数据库状态
         await this.taskRepository.update(
             { slug },
             {
                 isRunning: true,
-                nextRunTime: job.nextDate()
+                nextRunTime
             }
         );
 
@@ -181,6 +189,21 @@ export class TasksService implements OnModuleInit {
     private async processJob(slug: string) {
         try {
             this.logger.debug(`Processing job for slug: ${slug}`);
+
+            // 首先检查任务是否存在于数据库中
+            const task = await this.taskRepository.findOne({ where: { slug } });
+            if (!task) {
+                this.logger.error(`Task not found in database for slug: ${slug}`);
+                // 如果任务不在数据库中，从调度器中移除它
+                const jobName = `polymarket-${slug}`;
+                const job = this.schedulerRegistry.getCronJobs().get(jobName);
+                if (job) {
+                    job.stop();
+                    this.schedulerRegistry.deleteCronJob(jobName);
+                }
+                return;
+            }
+
             const eventData = await this.obtainDataService.getEventBySlug(slug);
 
             if (!eventData) {
@@ -192,17 +215,17 @@ export class TasksService implements OnModuleInit {
             await this.eventService.saveEventData(eventData);
             this.logger.debug(`Successfully saved event data for slug: ${slug}`);
 
-            // 更新最后执行时间
-            const job = this.schedulerRegistry.getCronJobs().get(`polymarket-${slug}`);
-            if (job) {
-                await this.taskRepository.update(
-                    { slug },
-                    {
-                        lastRunTime: new Date(),
-                        nextRunTime: job.nextDate()
-                    }
-                );
-            }
+            // 更新最后执行时间和下一次执行时间
+            const nextRunTime = new Date();
+            nextRunTime.setMinutes(nextRunTime.getMinutes() + 1);
+
+            await this.taskRepository.update(
+                { slug },
+                {
+                    lastRunTime: new Date(),
+                    nextRunTime
+                }
+            );
         } catch (error) {
             this.logger.error(`Error processing job for ${slug}: ${error.message}`);
             if (error instanceof HttpException) {
@@ -213,5 +236,29 @@ export class TasksService implements OnModuleInit {
                 HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
+    }
+
+    // GraphQL 方法
+    async findAll(): Promise<Task[]> {
+        return this.taskRepository.find();
+    }
+
+    async findOne(id: number): Promise<Task> {
+        const task = await this.taskRepository.findOne({ where: { id } });
+        if (!task) {
+            throw new HttpException('Task not found', HttpStatus.NOT_FOUND);
+        }
+        return task;
+    }
+
+    async create(createTaskInput: { name: string; description: string }): Promise<Task> {
+        const task = this.taskRepository.create({
+            name: createTaskInput.name,
+            slug: createTaskInput.name.toLowerCase().replace(/\s+/g, '-'),
+            isRunning: false,
+            nextRunTime: new Date(),
+            lastRunTime: undefined
+        });
+        return this.taskRepository.save(task);
     }
 } 

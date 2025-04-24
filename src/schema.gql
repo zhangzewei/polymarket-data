@@ -1,0 +1,160 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ClobReward {
+  amount: Float
+  currency: String
+  tokenId: String
+}
+
+input CreateTaskInput {
+  description: String!
+  name: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Event {
+  active: Boolean!
+  archived: Boolean!
+  closed: Boolean!
+  competitive: Float!
+  createdAt: DateTime!
+  creationDate: DateTime!
+  description: String!
+  endDate: DateTime!
+  eventId: String!
+  featured: Boolean!
+  id: Int!
+  liquidity: Float!
+  markets: [Market!]!
+  restricted: Boolean!
+  slug: String!
+  startDate: DateTime!
+  ticker: String!
+  title: String!
+  updatedAt: DateTime!
+  volume: Float!
+  volume1mo: Float!
+  volume1wk: Float!
+  volume1yr: Float!
+  volume24hr: Float!
+}
+
+type Market {
+  acceptingOrders: Boolean!
+  acceptingOrdersTimestamp: DateTime!
+  active: Boolean!
+  approved: Boolean!
+  archived: Boolean!
+  automaticallyActive: Boolean!
+  bestAsk: Float!
+  bestBid: Float!
+  clearBookOnStart: Boolean!
+  clobRewards: [ClobReward!]!
+  clobTokenIds: [String!]!
+  closed: Boolean!
+  competitive: Float!
+  conditionId: String!
+  createdAt: DateTime!
+  cyom: Boolean!
+  deploying: Boolean!
+  description: String!
+  endDate: DateTime!
+  event: Event!
+  eventId: String!
+  featured: Boolean!
+  funded: Boolean!
+  groupItemThreshold: String!
+  groupItemTitle: String!
+  id: Int!
+  lastTradePrice: Float!
+  liquidity: Float!
+  liquidityClob: Float!
+  manualActivation: Boolean!
+  marketId: String!
+  negRisk: Boolean!
+  negRiskMarketId: String!
+  negRiskOther: Boolean!
+  negRiskRequestId: String!
+  oneDayPriceChange: Float!
+  oneHourPriceChange: Float!
+  oneMonthPriceChange: Float!
+  oneWeekPriceChange: Float!
+  outcomePrices: [String!]!
+  outcomes: [String!]!
+  pagerDutyNotificationEnabled: Boolean!
+  pendingDeployment: Boolean!
+  question: String!
+  questionId: String!
+  ready: Boolean!
+  restricted: Boolean!
+  rewardsMaxSpread: Float!
+  rewardsMinSize: Float!
+  showGmpOutcome: Boolean!
+  showGmpSeries: Boolean!
+  slug: String!
+  spread: Float!
+  startDate: DateTime!
+  umaBond: String!
+  umaResolutionStatuses: [UmaResolutionStatus!]!
+  umaReward: String!
+  updatedAt: DateTime!
+  volume: Float!
+  volume1mo: Float!
+  volume1moClob: Float!
+  volume1wk: Float!
+  volume1wkClob: Float!
+  volume1yr: Float!
+  volume1yrClob: Float!
+  volume24hr: Float!
+  volume24hrClob: Float!
+  volumeClob: Float!
+}
+
+type MarketSummary {
+  active: Boolean!
+  bestAsk: Float!
+  bestBid: Float!
+  groupItemTitle: String!
+  outcomePrices: [String!]!
+  outcomes: [String!]!
+  slug: String!
+}
+
+type Mutation {
+  createTask(createTaskInput: CreateTaskInput!): Task!
+}
+
+type Query {
+  activeEvents: [Event!]!
+  activeMarketSummaries: [MarketSummary!]!
+  event(id: Int!): Event!
+  events: [Event!]!
+  marketSummaries: [MarketSummary!]!
+  recentEvents(limit: Int! = 10): [Event!]!
+  searchEvents(query: String!): [Event!]!
+  task(id: Int!): Task!
+  tasks: [Task!]!
+}
+
+type Task {
+  createdAt: DateTime!
+  id: Int!
+  isRunning: Boolean!
+  lastRunTime: DateTime
+  name: String!
+  nextRunTime: DateTime
+  slug: String!
+  updatedAt: DateTime!
+}
+
+type UmaResolutionStatus {
+  outcome: String
+  status: String
+  timestamp: String
+}
