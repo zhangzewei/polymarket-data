@@ -29,17 +29,17 @@ export class Event {
     @Column("text")
     description: string;
 
-    @Field(() => Date)
-    @Column({ name: "start_date" })
-    startDate: Date;
+    @Field()
+    @Column({ name: "start_date", type: "varchar" })
+    startDate: string;
 
-    @Field(() => Date)
-    @Column({ name: "end_date" })
-    endDate: Date;
+    @Field()
+    @Column({ name: "end_date", type: "varchar" })
+    endDate: string;
 
-    @Field(() => Date)
-    @Column({ name: "creation_date" })
-    creationDate: Date;
+    @Field()
+    @Column({ name: "creation_date", type: "varchar" })
+    creationDate: string;
 
     @Field()
     @Column({ default: true })
@@ -61,43 +61,43 @@ export class Event {
     @Column({ default: false })
     restricted: boolean;
 
-    @Field(() => Float)
-    @Column("decimal", { precision: 20, scale: 8 })
-    liquidity: number;
+    @Field()
+    @Column({ type: "varchar" })
+    liquidity: string;
 
-    @Field(() => Float)
-    @Column("decimal", { precision: 20, scale: 8 })
-    volume: number;
+    @Field()
+    @Column({ type: "varchar" })
+    volume: string;
 
-    @Field(() => Float)
-    @Column({ name: "volume_24hr", type: "decimal", precision: 20, scale: 8 })
-    volume24hr: number;
+    @Field()
+    @Column({ name: "volume_24hr", type: "varchar" })
+    volume24hr: string;
 
-    @Field(() => Float)
-    @Column({ name: "volume_1wk", type: "decimal", precision: 20, scale: 8 })
-    volume1wk: number;
+    @Field()
+    @Column({ name: "volume_1wk", type: "varchar" })
+    volume1wk: string;
 
-    @Field(() => Float)
-    @Column({ name: "volume_1mo", type: "decimal", precision: 20, scale: 8 })
-    volume1mo: number;
+    @Field()
+    @Column({ name: "volume_1mo", type: "varchar" })
+    volume1mo: string;
 
-    @Field(() => Float)
-    @Column({ name: "volume_1yr", type: "decimal", precision: 20, scale: 8 })
-    volume1yr: number;
+    @Field()
+    @Column({ name: "volume_1yr", type: "varchar" })
+    volume1yr: string;
 
-    @Field(() => Float)
-    @Column("decimal", { precision: 10, scale: 8 })
-    competitive: number;
+    @Field()
+    @Column({ type: "varchar" })
+    competitive: string;
 
     @Field(() => [Market])
     @OneToMany(() => Market, market => market.event, { cascade: true })
     markets: Market[];
 
-    @Field(() => Date)
-    @CreateDateColumn({ name: "created_at" })
-    createdAt: Date;
+    @Field()
+    @CreateDateColumn({ name: "created_at", type: "varchar" })
+    createdAt: string;
 
-    @Field(() => Date)
-    @UpdateDateColumn({ name: "updated_at" })
-    updatedAt: Date;
+    @Field()
+    @UpdateDateColumn({ name: "updated_at", type: "varchar" })
+    updatedAt: string;
 } 

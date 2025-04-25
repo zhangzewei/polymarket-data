@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm";
+import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm";
 
 export class CreateMarketsTable1709123456791 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
@@ -17,6 +17,7 @@ export class CreateMarketsTable1709123456791 implements MigrationInterface {
                         name: "market_id",
                         type: "varchar",
                         isUnique: true,
+                        isNullable: true,
                     },
                     {
                         name: "event_id",
@@ -40,12 +41,12 @@ export class CreateMarketsTable1709123456791 implements MigrationInterface {
                     },
                     {
                         name: "start_date",
-                        type: "timestamp",
+                        type: "varchar",
                         isNullable: true,
                     },
                     {
                         name: "end_date",
-                        type: "timestamp",
+                        type: "varchar",
                         isNullable: true,
                     },
                     {
@@ -243,7 +244,7 @@ export class CreateMarketsTable1709123456791 implements MigrationInterface {
                     },
                     {
                         name: "accepting_orders_timestamp",
-                        type: "timestamp",
+                        type: "varchar",
                         isNullable: true,
                     },
                     {
@@ -278,7 +279,9 @@ export class CreateMarketsTable1709123456791 implements MigrationInterface {
                     },
                     {
                         name: "rewards_min_size",
-                        type: "int",
+                        type: "decimal",
+                        precision: 10,
+                        scale: 8,
                         isNullable: true,
                     },
                     {
@@ -399,30 +402,39 @@ export class CreateMarketsTable1709123456791 implements MigrationInterface {
                     },
                     {
                         name: "created_at",
-                        type: "timestamp",
-                        default: "CURRENT_TIMESTAMP",
+                        type: "varchar",
+                        isNullable: true,
                     },
                     {
                         name: "updated_at",
-                        type: "timestamp",
-                        default: "CURRENT_TIMESTAMP",
-                        onUpdate: "CURRENT_TIMESTAMP",
-                    },
-                ],
-                foreignKeys: [
-                    {
-                        columnNames: ["event_id"],
-                        referencedTableName: "events",
-                        referencedColumnNames: ["event_id"],
-                        onDelete: "CASCADE",
+                        type: "varchar",
+                        isNullable: true,
                     },
                 ],
             }),
             true
         );
+
+        // 添加外键约束
+        await queryRunner.createForeignKey(
+            "markets",
+            new TableForeignKey({
+                columnNames: ["event_id"],
+                referencedColumnNames: ["event_id"],
+                referencedTableName: "events",
+                onDelete: "CASCADE",
+            })
+        );
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        const table = await queryRunner.getTable("markets");
+        if (table) {
+            const foreignKey = table.foreignKeys.find(fk => fk.columnNames.indexOf("event_id") !== -1);
+            if (foreignKey) {
+                await queryRunner.dropForeignKey("markets", foreignKey);
+            }
+        }
         await queryRunner.dropTable("markets");
     }
 } 

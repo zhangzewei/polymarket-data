@@ -17,6 +17,7 @@ export class CreateEventsTable1709123456790 implements MigrationInterface {
                         name: "event_id",
                         type: "varchar",
                         isUnique: true,
+                        isNullable: true,
                     },
                     {
                         name: "ticker",
@@ -40,17 +41,17 @@ export class CreateEventsTable1709123456790 implements MigrationInterface {
                     },
                     {
                         name: "start_date",
-                        type: "timestamp",
+                        type: "varchar",
                         isNullable: true,
                     },
                     {
                         name: "end_date",
-                        type: "timestamp",
+                        type: "varchar",
                         isNullable: true,
                     },
                     {
                         name: "creation_date",
-                        type: "timestamp",
+                        type: "varchar",
                         isNullable: true,
                     },
                     {
@@ -134,14 +135,13 @@ export class CreateEventsTable1709123456790 implements MigrationInterface {
                     },
                     {
                         name: "created_at",
-                        type: "timestamp",
-                        default: "CURRENT_TIMESTAMP",
+                        type: "varchar",
+                        isNullable: true,
                     },
                     {
                         name: "updated_at",
-                        type: "timestamp",
-                        default: "CURRENT_TIMESTAMP",
-                        onUpdate: "CURRENT_TIMESTAMP",
+                        type: "varchar",
+                        isNullable: true,
                     },
                 ],
             }),

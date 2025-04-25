@@ -22,49 +22,49 @@ type Event {
   active: Boolean!
   archived: Boolean!
   closed: Boolean!
-  competitive: Float!
-  createdAt: DateTime!
-  creationDate: DateTime!
+  competitive: String!
+  createdAt: String!
+  creationDate: String!
   description: String!
-  endDate: DateTime!
+  endDate: String!
   eventId: String!
   featured: Boolean!
   id: Int!
-  liquidity: Float!
+  liquidity: String!
   markets: [Market!]!
   restricted: Boolean!
   slug: String!
-  startDate: DateTime!
+  startDate: String!
   ticker: String!
   title: String!
-  updatedAt: DateTime!
-  volume: Float!
-  volume1mo: Float!
-  volume1wk: Float!
-  volume1yr: Float!
-  volume24hr: Float!
+  updatedAt: String!
+  volume: String!
+  volume1mo: String!
+  volume1wk: String!
+  volume1yr: String!
+  volume24hr: String!
 }
 
 type Market {
   acceptingOrders: Boolean!
-  acceptingOrdersTimestamp: DateTime!
+  acceptingOrdersTimestamp: String!
   active: Boolean!
   approved: Boolean!
   archived: Boolean!
   automaticallyActive: Boolean!
-  bestAsk: Float!
-  bestBid: Float!
+  bestAsk: String!
+  bestBid: String!
   clearBookOnStart: Boolean!
   clobRewards: [ClobReward!]!
   clobTokenIds: [String!]!
   closed: Boolean!
-  competitive: Float!
+  competitive: String!
   conditionId: String!
-  createdAt: DateTime!
+  createdAt: String!
   cyom: Boolean!
   deploying: Boolean!
   description: String!
-  endDate: DateTime!
+  endDate: String!
   event: Event!
   eventId: String!
   featured: Boolean!
@@ -72,19 +72,19 @@ type Market {
   groupItemThreshold: String!
   groupItemTitle: String!
   id: Int!
-  lastTradePrice: Float!
-  liquidity: Float!
-  liquidityClob: Float!
+  lastTradePrice: String!
+  liquidity: String!
+  liquidityClob: String!
   manualActivation: Boolean!
   marketId: String!
   negRisk: Boolean!
   negRiskMarketId: String!
   negRiskOther: Boolean!
   negRiskRequestId: String!
-  oneDayPriceChange: Float!
-  oneHourPriceChange: Float!
-  oneMonthPriceChange: Float!
-  oneWeekPriceChange: Float!
+  oneDayPriceChange: String!
+  oneHourPriceChange: String!
+  oneMonthPriceChange: String!
+  oneWeekPriceChange: String!
   outcomePrices: [String!]!
   outcomes: [String!]!
   pagerDutyNotificationEnabled: Boolean!
@@ -93,33 +93,33 @@ type Market {
   questionId: String!
   ready: Boolean!
   restricted: Boolean!
-  rewardsMaxSpread: Float!
-  rewardsMinSize: Float!
+  rewardsMaxSpread: String!
+  rewardsMinSize: String!
   showGmpOutcome: Boolean!
   showGmpSeries: Boolean!
   slug: String!
-  spread: Float!
-  startDate: DateTime!
+  spread: String!
+  startDate: String!
   umaBond: String!
   umaResolutionStatuses: [UmaResolutionStatus!]!
   umaReward: String!
-  updatedAt: DateTime!
-  volume: Float!
-  volume1mo: Float!
-  volume1moClob: Float!
-  volume1wk: Float!
-  volume1wkClob: Float!
-  volume1yr: Float!
-  volume1yrClob: Float!
-  volume24hr: Float!
-  volume24hrClob: Float!
-  volumeClob: Float!
+  updatedAt: String!
+  volume: String!
+  volume1mo: String!
+  volume1moClob: String!
+  volume1wk: String!
+  volume1wkClob: String!
+  volume1yr: String!
+  volume1yrClob: String!
+  volume24hr: String!
+  volume24hrClob: String!
+  volumeClob: String!
 }
 
 type MarketSummary {
   active: Boolean!
-  bestAsk: Float!
-  bestBid: Float!
+  bestAsk: String!
+  bestBid: String!
   groupItemTitle: String!
   outcomePrices: [String!]!
   outcomes: [String!]!

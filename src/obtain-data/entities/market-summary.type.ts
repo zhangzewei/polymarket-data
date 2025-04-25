@@ -1,4 +1,4 @@
-import { ObjectType, Field, Float } from '@nestjs/graphql';
+import { ObjectType, Field } from '@nestjs/graphql';
 
 @ObjectType()
 export class MarketSummary {
@@ -17,9 +17,9 @@ export class MarketSummary {
     @Field()
     groupItemTitle: string;
 
-    @Field(() => Float)
-    bestBid: number;
+    @Field()
+    bestBid: string;
 
-    @Field(() => Float)
-    bestAsk: number;
+    @Field()
+    bestAsk: string;
 } 

@@ -28,12 +28,10 @@ export class EventController {
     }
 
     @Get('date-range')
-    async findByDateRange(
-        @Query('start') start: string,
-        @Query('end') end: string,
+    async findEventsByDateRange(
+        @Query('startDate') startDate: string,
+        @Query('endDate') endDate: string,
     ): Promise<Event[]> {
-        const startDate = new Date(start);
-        const endDate = new Date(end);
         return this.eventService.findEventsByDateRange(startDate, endDate);
     }
 

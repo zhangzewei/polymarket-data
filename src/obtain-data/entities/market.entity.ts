@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
 import { Event } from "./event.entity";
-import { ObjectType, Field, Int, Float } from '@nestjs/graphql';
+import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { ClobReward } from './clob-reward.type';
 import { UmaResolutionStatus } from './uma-resolution-status.type';
 
@@ -31,13 +31,13 @@ export class Market {
     @Column()
     slug: string;
 
-    @Field(() => Date)
-    @Column({ name: "start_date" })
-    startDate: Date;
+    @Field()
+    @Column({ name: "start_date", type: "varchar" })
+    startDate: string;
 
-    @Field(() => Date)
-    @Column({ name: "end_date" })
-    endDate: Date;
+    @Field()
+    @Column({ name: "end_date", type: "varchar" })
+    endDate: string;
 
     @Field()
     @Column("text")
@@ -51,13 +51,13 @@ export class Market {
     @Column({ name: "outcome_prices", type: "json" })
     outcomePrices: string[];
 
-    @Field(() => Float)
-    @Column("decimal", { precision: 20, scale: 8 })
-    liquidity: number;
+    @Field()
+    @Column({ type: "varchar" })
+    liquidity: string;
 
-    @Field(() => Float)
-    @Column("decimal", { precision: 20, scale: 8 })
-    volume: number;
+    @Field()
+    @Column({ type: "varchar" })
+    volume: string;
 
     @Field()
     @Column({ default: true })
@@ -91,21 +91,21 @@ export class Market {
     @Column({ name: "question_id" })
     questionId: string;
 
-    @Field(() => Float)
-    @Column({ name: "volume_24hr", type: "decimal", precision: 20, scale: 8 })
-    volume24hr: number;
+    @Field()
+    @Column({ name: "volume_24hr", type: "varchar" })
+    volume24hr: string;
 
-    @Field(() => Float)
-    @Column({ name: "volume_1wk", type: "decimal", precision: 20, scale: 8 })
-    volume1wk: number;
+    @Field()
+    @Column({ name: "volume_1wk", type: "varchar" })
+    volume1wk: string;
 
-    @Field(() => Float)
-    @Column({ name: "volume_1mo", type: "decimal", precision: 20, scale: 8 })
-    volume1mo: number;
+    @Field()
+    @Column({ name: "volume_1mo", type: "varchar" })
+    volume1mo: string;
 
-    @Field(() => Float)
-    @Column({ name: "volume_1yr", type: "decimal", precision: 20, scale: 8 })
-    volume1yr: number;
+    @Field()
+    @Column({ name: "volume_1yr", type: "varchar" })
+    volume1yr: string;
 
     @Field(() => [String])
     @Column({ name: "clob_token_ids", type: "json" })
@@ -119,29 +119,29 @@ export class Market {
     @Column({ name: "uma_reward" })
     umaReward: string;
 
-    @Field(() => Float)
-    @Column({ name: "volume_24hr_clob", type: "decimal", precision: 20, scale: 8 })
-    volume24hrClob: number;
+    @Field()
+    @Column({ name: "volume_24hr_clob", type: "varchar" })
+    volume24hrClob: string;
 
-    @Field(() => Float)
-    @Column({ name: "volume_1wk_clob", type: "decimal", precision: 20, scale: 8 })
-    volume1wkClob: number;
+    @Field()
+    @Column({ name: "volume_1wk_clob", type: "varchar" })
+    volume1wkClob: string;
 
-    @Field(() => Float)
-    @Column({ name: "volume_1mo_clob", type: "decimal", precision: 20, scale: 8 })
-    volume1moClob: number;
+    @Field()
+    @Column({ name: "volume_1mo_clob", type: "varchar" })
+    volume1moClob: string;
 
-    @Field(() => Float)
-    @Column({ name: "volume_1yr_clob", type: "decimal", precision: 20, scale: 8 })
-    volume1yrClob: number;
+    @Field()
+    @Column({ name: "volume_1yr_clob", type: "varchar" })
+    volume1yrClob: string;
 
-    @Field(() => Float)
-    @Column({ name: "volume_clob", type: "decimal", precision: 20, scale: 8 })
-    volumeClob: number;
+    @Field()
+    @Column({ name: "volume_clob", type: "varchar" })
+    volumeClob: string;
 
-    @Field(() => Float)
-    @Column({ name: "liquidity_clob", type: "decimal", precision: 20, scale: 8 })
-    liquidityClob: number;
+    @Field()
+    @Column({ name: "liquidity_clob", type: "varchar" })
+    liquidityClob: string;
 
     @Field()
     @Column({ name: "accepting_orders", default: true })
@@ -167,17 +167,17 @@ export class Market {
     @Column({ default: false })
     funded: boolean;
 
-    @Field(() => Date)
-    @Column({ name: "accepting_orders_timestamp" })
-    acceptingOrdersTimestamp: Date;
+    @Field()
+    @Column({ name: "accepting_orders_timestamp", type: "varchar" })
+    acceptingOrdersTimestamp: string;
 
     @Field()
     @Column({ default: false })
     cyom: boolean;
 
-    @Field(() => Float)
-    @Column("decimal", { precision: 10, scale: 8 })
-    competitive: number;
+    @Field()
+    @Column({ type: "varchar" })
+    competitive: string;
 
     @Field()
     @Column({ name: "pager_duty_notification_enabled", default: false })
@@ -191,45 +191,45 @@ export class Market {
     @Column({ name: "clob_rewards", type: "json" })
     clobRewards: ClobReward[];
 
-    @Field(() => Float)
-    @Column({ name: "rewards_min_size" })
-    rewardsMinSize: number;
+    @Field()
+    @Column({ name: "rewards_min_size", type: "varchar" })
+    rewardsMinSize: string;
 
-    @Field(() => Float)
-    @Column({ name: "rewards_max_spread", type: "decimal", precision: 10, scale: 2 })
-    rewardsMaxSpread: number;
+    @Field()
+    @Column({ name: "rewards_max_spread", type: "varchar" })
+    rewardsMaxSpread: string;
 
-    @Field(() => Float)
-    @Column("decimal", { precision: 10, scale: 8 })
-    spread: number;
+    @Field()
+    @Column({ type: "varchar" })
+    spread: string;
 
-    @Field(() => Float)
-    @Column({ name: "one_day_price_change", type: "decimal", precision: 10, scale: 8 })
-    oneDayPriceChange: number;
+    @Field()
+    @Column({ name: "one_day_price_change", type: "varchar" })
+    oneDayPriceChange: string;
 
-    @Field(() => Float)
-    @Column({ name: "one_hour_price_change", type: "decimal", precision: 10, scale: 8 })
-    oneHourPriceChange: number;
+    @Field()
+    @Column({ name: "one_hour_price_change", type: "varchar" })
+    oneHourPriceChange: string;
 
-    @Field(() => Float)
-    @Column({ name: "one_week_price_change", type: "decimal", precision: 10, scale: 8 })
-    oneWeekPriceChange: number;
+    @Field()
+    @Column({ name: "one_week_price_change", type: "varchar" })
+    oneWeekPriceChange: string;
 
-    @Field(() => Float)
-    @Column({ name: "one_month_price_change", type: "decimal", precision: 10, scale: 8 })
-    oneMonthPriceChange: number;
+    @Field()
+    @Column({ name: "one_month_price_change", type: "varchar" })
+    oneMonthPriceChange: string;
 
-    @Field(() => Float)
-    @Column({ name: "last_trade_price", type: "decimal", precision: 10, scale: 8 })
-    lastTradePrice: number;
+    @Field()
+    @Column({ name: "last_trade_price", type: "varchar" })
+    lastTradePrice: string;
 
-    @Field(() => Float)
-    @Column({ name: "best_bid", type: "decimal", precision: 10, scale: 8 })
-    bestBid: number;
+    @Field()
+    @Column({ name: "best_bid", type: "varchar" })
+    bestBid: string;
 
-    @Field(() => Float)
-    @Column({ name: "best_ask", type: "decimal", precision: 10, scale: 8 })
-    bestAsk: number;
+    @Field()
+    @Column({ name: "best_ask", type: "varchar" })
+    bestAsk: string;
 
     @Field()
     @Column({ name: "automatically_active", default: true })
@@ -267,13 +267,13 @@ export class Market {
     @Column({ default: false })
     deploying: boolean;
 
-    @Field(() => Date)
-    @CreateDateColumn({ name: "created_at" })
-    createdAt: Date;
+    @Field()
+    @CreateDateColumn({ name: "created_at", type: "varchar" })
+    createdAt: string;
 
-    @Field(() => Date)
-    @UpdateDateColumn({ name: "updated_at" })
-    updatedAt: Date;
+    @Field()
+    @UpdateDateColumn({ name: "updated_at", type: "varchar" })
+    updatedAt: string;
 
     @Field(() => Event)
     @ManyToOne(() => Event, event => event.markets)

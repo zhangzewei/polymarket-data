@@ -86,7 +86,8 @@ export class TasksService implements OnModuleInit {
                 slug,
                 name: jobName,
                 isRunning: true,
-                nextRunTime
+                nextRunTime,
+                lastRunTime: new Date()
             });
             await this.taskRepository.save(task);
 
@@ -203,7 +204,6 @@ export class TasksService implements OnModuleInit {
                 }
                 return;
             }
-
             const eventData = await this.obtainDataService.getEventBySlug(slug);
 
             if (!eventData) {
@@ -211,7 +211,6 @@ export class TasksService implements OnModuleInit {
                 return;
             }
 
-            // 保存事件和市场数据到数据库
             await this.eventService.saveEventData(eventData);
             this.logger.debug(`Successfully saved event data for slug: ${slug}`);
 
@@ -257,7 +256,7 @@ export class TasksService implements OnModuleInit {
             slug: createTaskInput.name.toLowerCase().replace(/\s+/g, '-'),
             isRunning: false,
             nextRunTime: new Date(),
-            lastRunTime: undefined
+            lastRunTime: new Date()
         });
         return this.taskRepository.save(task);
     }

@@ -105,6 +105,14 @@ export class EventService {
         private marketRepository: Repository<Market>,
     ) { }
 
+    // 将数值转换为字符串
+    private convertNumberToString(value: number | null | undefined): string {
+        if (value === null || value === undefined) {
+            return '0';
+        }
+        return value.toString();
+    }
+
     async saveEventData(eventData: EventData): Promise<void> {
         // 检查事件是否已存在
         const existingEvent = await this.eventRepository.findOne({
@@ -122,21 +130,21 @@ export class EventService {
             slug: restEventData.slug || '',
             title: restEventData.title || '',
             description: restEventData.description || '',
-            startDate: new Date(startDate),
-            endDate: new Date(endDate),
-            creationDate: new Date(creationDate),
+            startDate: startDate ? startDate.toString() : '',
+            endDate: endDate ? endDate.toString() : '',
+            creationDate: creationDate ? creationDate.toString() : '',
             active: restEventData.active ?? true,
             closed: restEventData.closed ?? false,
             archived: restEventData.archived ?? false,
             featured: restEventData.featured ?? false,
             restricted: restEventData.restricted ?? false,
-            liquidity: restEventData.liquidity || 0,
-            volume: restEventData.volume || 0,
-            volume24hr: restEventData.volume24hr || 0,
-            volume1wk: restEventData.volume1wk || 0,
-            volume1mo: restEventData.volume1mo || 0,
-            volume1yr: restEventData.volume1yr || 0,
-            competitive: restEventData.competitive || 0,
+            liquidity: this.convertNumberToString(restEventData.liquidity),
+            volume: this.convertNumberToString(restEventData.volume),
+            volume24hr: this.convertNumberToString(restEventData.volume24hr),
+            volume1wk: this.convertNumberToString(restEventData.volume1wk),
+            volume1mo: this.convertNumberToString(restEventData.volume1mo),
+            volume1yr: this.convertNumberToString(restEventData.volume1yr),
+            competitive: this.convertNumberToString(restEventData.competitive),
         };
 
         // 如果事件已存在，更新它
@@ -174,13 +182,13 @@ export class EventService {
                     question: restMarketData.question || '',
                     conditionId: restMarketData.conditionId || '',
                     slug: restMarketData.slug || '',
-                    startDate: new Date(startDate),
-                    endDate: new Date(endDate),
+                    startDate: startDate ? startDate.toString() : '',
+                    endDate: endDate ? endDate.toString() : '',
                     description: restMarketData.description || '',
                     outcomes: outcomes ? JSON.parse(outcomes) : [],
                     outcomePrices: outcomePrices ? JSON.parse(outcomePrices) : [],
-                    liquidity: restMarketData.liquidity || 0,
-                    volume: restMarketData.volume || 0,
+                    liquidity: this.convertNumberToString(restMarketData.liquidity),
+                    volume: this.convertNumberToString(restMarketData.volume),
                     active: restMarketData.active ?? true,
                     closed: restMarketData.closed ?? false,
                     archived: restMarketData.archived ?? false,
@@ -189,41 +197,41 @@ export class EventService {
                     groupItemTitle: restMarketData.groupItemTitle || '',
                     groupItemThreshold: restMarketData.groupItemThreshold || '',
                     questionId: questionID || '',
-                    volume24hr: restMarketData.volume24hr || 0,
-                    volume1wk: restMarketData.volume1wk || 0,
-                    volume1mo: restMarketData.volume1mo || 0,
-                    volume1yr: restMarketData.volume1yr || 0,
+                    volume24hr: this.convertNumberToString(restMarketData.volume24hr),
+                    volume1wk: this.convertNumberToString(restMarketData.volume1wk),
+                    volume1mo: this.convertNumberToString(restMarketData.volume1mo),
+                    volume1yr: this.convertNumberToString(restMarketData.volume1yr),
                     clobTokenIds: clobTokenIds ? JSON.parse(clobTokenIds) : [],
                     umaBond: restMarketData.umaBond || '',
                     umaReward: restMarketData.umaReward || '',
-                    volume24hrClob: restMarketData.volume24hrClob || 0,
-                    volume1wkClob: restMarketData.volume1wkClob || 0,
-                    volume1moClob: restMarketData.volume1moClob || 0,
-                    volume1yrClob: restMarketData.volume1yrClob || 0,
-                    volumeClob: restMarketData.volumeClob || 0,
-                    liquidityClob: restMarketData.liquidityClob || 0,
+                    volume24hrClob: this.convertNumberToString(restMarketData.volume24hrClob),
+                    volume1wkClob: this.convertNumberToString(restMarketData.volume1wkClob),
+                    volume1moClob: this.convertNumberToString(restMarketData.volume1moClob),
+                    volume1yrClob: this.convertNumberToString(restMarketData.volume1yrClob),
+                    volumeClob: this.convertNumberToString(restMarketData.volumeClob),
+                    liquidityClob: this.convertNumberToString(restMarketData.liquidityClob),
                     acceptingOrders: restMarketData.acceptingOrders ?? true,
                     negRisk: restMarketData.negRisk ?? false,
                     negRiskMarketId: negRiskMarketID || '',
                     negRiskRequestId: negRiskRequestID || '',
                     ready: restMarketData.ready ?? false,
                     funded: restMarketData.funded ?? false,
-                    acceptingOrdersTimestamp: acceptingOrdersTimestamp ? new Date(acceptingOrdersTimestamp) : undefined,
+                    acceptingOrdersTimestamp: acceptingOrdersTimestamp ? acceptingOrdersTimestamp.toString() : '',
                     cyom: restMarketData.cyom ?? false,
-                    competitive: restMarketData.competitive || 0,
+                    competitive: this.convertNumberToString(restMarketData.competitive),
                     pagerDutyNotificationEnabled: restMarketData.pagerDutyNotificationEnabled ?? false,
                     approved: restMarketData.approved ?? false,
                     clobRewards: restMarketData.clobRewards || [],
-                    rewardsMinSize: restMarketData.rewardsMinSize || 0,
-                    rewardsMaxSpread: restMarketData.rewardsMaxSpread || 0,
-                    spread: restMarketData.spread || 0,
-                    oneDayPriceChange: restMarketData.oneDayPriceChange || 0,
-                    oneHourPriceChange: restMarketData.oneHourPriceChange || 0,
-                    oneWeekPriceChange: restMarketData.oneWeekPriceChange || 0,
-                    oneMonthPriceChange: restMarketData.oneMonthPriceChange || 0,
-                    lastTradePrice: restMarketData.lastTradePrice || 0,
-                    bestBid: restMarketData.bestBid || 0,
-                    bestAsk: restMarketData.bestAsk || 0,
+                    rewardsMinSize: this.convertNumberToString(restMarketData.rewardsMinSize),
+                    rewardsMaxSpread: this.convertNumberToString(restMarketData.rewardsMaxSpread),
+                    spread: this.convertNumberToString(restMarketData.spread),
+                    oneDayPriceChange: this.convertNumberToString(restMarketData.oneDayPriceChange),
+                    oneHourPriceChange: this.convertNumberToString(restMarketData.oneHourPriceChange),
+                    oneWeekPriceChange: this.convertNumberToString(restMarketData.oneWeekPriceChange),
+                    oneMonthPriceChange: this.convertNumberToString(restMarketData.oneMonthPriceChange),
+                    lastTradePrice: this.convertNumberToString(restMarketData.lastTradePrice),
+                    bestBid: this.convertNumberToString(restMarketData.bestBid),
+                    bestAsk: this.convertNumberToString(restMarketData.bestAsk),
                     automaticallyActive: restMarketData.automaticallyActive ?? true,
                     clearBookOnStart: restMarketData.clearBookOnStart ?? true,
                     showGmpSeries: restMarketData.showGmpSeries ?? false,
@@ -241,10 +249,8 @@ export class EventService {
                 });
 
                 if (existingMarket) {
-                    // 如果存在，更新市场数据
                     await this.marketRepository.update({ marketId: id }, marketToSave);
                 } else {
-                    // 如果不存在，创建新市场
                     Object.assign(market, marketToSave);
                     await this.marketRepository.save(market);
                 }
@@ -314,15 +320,11 @@ export class EventService {
         });
     }
 
-    async findEventsByDateRange(startDate: Date, endDate: Date): Promise<Event[]> {
+    async findEventsByDateRange(startDate: string, endDate: string): Promise<Event[]> {
         return this.eventRepository.find({
             where: {
-                startDate: Between(startDate, endDate),
-            },
-            relations: ['markets'],
-            order: {
-                startDate: 'ASC',
-            },
+                startDate: Between(startDate, endDate)
+            }
         });
     }
 } 
