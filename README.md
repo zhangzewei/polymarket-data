@@ -1,98 +1,170 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Polymarket Data Service
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A NestJS-based service for collecting, storing, and analyzing Polymarket prediction market data. This service provides APIs to access market data, event information, and price history.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+- Real-time market data collection
+- Historical price tracking
+- Event and market management
+- CSV export functionality for market price history
+- GraphQL API for data querying
+- RESTful API endpoints for data access
+- Automatic data synchronization with Polymarket
+- Swagger API documentation
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Prerequisites
 
-## Project setup
+- Node.js (v16 or higher)
+- PostgreSQL (v12 or higher)
+- npm or yarn
+
+## Installation
 
 ```bash
-$ npm install
+# Clone the repository
+git clone [repository-url]
+
+# Install dependencies
+npm install
+
+# Create .env file
+cp .env.example .env
 ```
 
-## Compile and run the project
+## Configuration
 
-```bash
-# development
-$ npm run start
+Edit the `.env` file with your database credentials and other configuration:
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+DB_DATABASE=polymarket_data
 ```
 
-## Run tests
+## Database Setup
+
+The project uses TypeORM migrations to manage database schema. To create the database tables:
 
 ```bash
-# unit tests
-$ npm run test
+# Run all migrations
+npm run typeorm migration:run
 
-# e2e tests
-$ npm run test:e2e
+# If you need to revert migrations
+npm run typeorm migration:revert
+```
 
-# test coverage
-$ npm run test:cov
+Migration files are located in `src/migrations/` and will be executed in the following order:
+1. Create Tasks Table
+2. Create Events Table
+3. Create Markets Table
+4. Create Market Price Histories Table
+
+## Running the Application
+
+```bash
+# Development mode
+npm run start:dev
+
+# Production mode
+npm run start:prod
+```
+
+## API Documentation
+
+### Swagger UI
+The service includes Swagger UI for interactive API documentation. Access the Swagger documentation at `/api` when running the application.
+
+Features:
+- Interactive API documentation
+- Try out API endpoints directly from the browser
+- View request/response schemas
+- Download OpenAPI specification
+
+### REST API Endpoints
+
+#### Events
+- `GET /events` - Get all events
+- `GET /events/:eventId` - Get event by ID
+- `GET /events/:eventId/markets` - Get markets for an event
+- `GET /events/:eventId/market-price-history/download-csv` - Download market price history as CSV
+
+#### Markets
+- `GET /markets/:marketId` - Get market by ID
+
+### GraphQL API
+
+The service provides a GraphQL API for flexible data querying. Access the GraphQL playground at `/graphql` when running the application.
+
+#### Available Queries
+- `events` - Query all events with filtering options
+- `event` - Get a specific event by ID
+- `markets` - Query markets with various filters
+- `market` - Get a specific market by ID
+- `marketPriceHistories` - Get price history for markets
+
+#### Example GraphQL Query
+```graphql
+query {
+  events {
+    eventId
+    title
+    markets {
+      marketId
+      question
+      priceHistories {
+        bestBid
+        bestAsk
+        createdAt
+      }
+    }
+  }
+}
+```
+
+## CSV Export Format
+
+The market price history CSV export includes the following columns:
+- Event Slug
+- Market Slug
+- Group Item Title
+- Active Status
+- Outcomes
+- Outcome Prices
+- Timestamp
+- Best Bid
+- Best Ask
+
+## Development
+
+```bash
+# Run tests
+npm run test
+
+# Run e2e tests
+npm run test:e2e
+
+# Generate migration
+npm run typeorm migration:generate -- -n MigrationName
 ```
 
 ## Deployment
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+1. Set up a PostgreSQL database
+2. Configure environment variables
+3. Run database migrations
+4. Build and start the application
 
 ```bash
-$ npm install -g mau
-$ mau deploy
+# Build the application
+npm run build
+
+# Start in production mode
+npm run start:prod
 ```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is licensed under the MIT License - see the LICENSE file for details.
