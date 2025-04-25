@@ -34,8 +34,30 @@ cp .env.example .env
 
 ## Configuration
 
-Edit the `.env` file with your database credentials and other configuration:
+### Database Configuration
 
+The service requires PostgreSQL database. Make sure you have PostgreSQL installed and running before starting the application.
+
+#### PostgreSQL Requirements
+- Version: 12 or higher
+- Extensions: 
+  - `uuid-ossp` (for UUID generation)
+  - `pgcrypto` (for encryption functions)
+  - `jsonb` (for JSON data type support)
+
+#### Database Setup
+1. Create a new PostgreSQL database:
+```sql
+CREATE DATABASE polymarket_data;
+```
+
+2. Enable required extensions:
+```sql
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+```
+
+3. Configure the database connection in `.env`:
 ```env
 DB_HOST=localhost
 DB_PORT=5432
@@ -43,6 +65,10 @@ DB_USERNAME=your_username
 DB_PASSWORD=your_password
 DB_DATABASE=polymarket_data
 ```
+
+### Other Configuration
+
+Edit the `.env` file with other configuration settings as needed.
 
 ## Database Setup
 
