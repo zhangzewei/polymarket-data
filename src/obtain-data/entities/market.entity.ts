@@ -1,8 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 import { Event } from "./event.entity";
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { ClobReward } from './clob-reward.type';
 import { UmaResolutionStatus } from './uma-resolution-status.type';
+import { MarketPriceHistory } from './market-price-history.entity';
 
 @ObjectType()
 @Entity("markets")
@@ -274,6 +275,10 @@ export class Market {
     @Field()
     @UpdateDateColumn({ name: "updated_at", type: "varchar" })
     updatedAt: string;
+
+    @Field(() => [MarketPriceHistory])
+    @OneToMany(() => MarketPriceHistory, priceHistory => priceHistory.market)
+    priceHistories: MarketPriceHistory[];
 
     @Field(() => Event)
     @ManyToOne(() => Event, event => event.markets)

@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
-import { EventData } from './services/event.service';
+import { EventData } from './types/event-data.type';
 
 @Injectable()
 export class ObtainDataService {

@@ -22,6 +22,15 @@ export class EventsResolver {
         return event;
     }
 
+    @Query(() => Event)
+    async eventByEventId(@Args('eventId') eventId: string): Promise<Event> {
+        const event = await this.eventService.findEventById(eventId);
+        if (!event) {
+            throw new HttpException('Event not found', HttpStatus.NOT_FOUND);
+        }
+        return event;
+    }
+
     @Query(() => [Event])
     async activeEvents(): Promise<Event[]> {
         return this.eventService.findEventsByStatus(true);
