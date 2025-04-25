@@ -310,4 +310,34 @@ export class EventService {
             }
         });
     }
+
+    async getMarketPriceHistoryForEvent(eventId: string): Promise<{
+        eventSlug: string;
+        marketId: string;
+        marketSlug: string;
+        outcomes: string[];
+        outcomePrices: string[];
+        active: boolean;
+        groupItemTitle: string;
+        priceHistories: MarketPriceHistory[];
+    }[]> {
+        const markets = await this.marketRepository
+            .createQueryBuilder('market')
+            .leftJoinAndSelect('market.event', 'event')
+            .leftJoinAndSelect('market.priceHistories', 'priceHistory')
+            .where('market.eventId = :eventId', { eventId: String(eventId) })
+            .orderBy('priceHistory.createdAt', 'ASC')
+            .getMany();
+
+        return markets.map(market => ({
+            eventSlug: market.event.slug,
+            marketId: market.marketId,
+            marketSlug: market.slug,
+            outcomes: market.outcomes,
+            outcomePrices: market.outcomePrices,
+            active: market.active,
+            groupItemTitle: market.groupItemTitle,
+            priceHistories: market.priceHistories
+        }));
+    }
 } 
