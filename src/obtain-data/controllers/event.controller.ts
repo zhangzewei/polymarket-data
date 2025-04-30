@@ -16,6 +16,11 @@ export class EventController {
         return this.eventService.findAllEvents();
     }
 
+    @Get('simple')
+    async findAllSimple(): Promise<Event[]> {
+        return this.eventService.findAllEventsBasic();
+    }
+
     @Get('recent')
     async findRecent(@Query('limit') limit?: number): Promise<Event[]> {
         return this.eventService.findRecentEvents(limit);

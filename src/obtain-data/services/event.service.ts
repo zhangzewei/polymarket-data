@@ -245,6 +245,13 @@ export class EventService {
             .getMany();
     }
 
+    async findAllEventsBasic(): Promise<Event[]> {
+        return this.eventRepository
+            .createQueryBuilder('event')
+            .orderBy('event.createdAt', 'DESC')
+            .getMany();
+    }
+
     async findEventById(eventId: string): Promise<Event | null> {
         return this.eventRepository
             .createQueryBuilder('event')
